@@ -1,0 +1,33 @@
+﻿@model InstituicaoEnsino.Models.Professor
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h4>Cadastrar Professor</h4>
+<hr />
+
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group row">
+        <label asp-for="Nome" class="col-1 col-form-label col-form-label-sm"></label>
+        <span asp-validation-for="Nome" class="text-danger"></span>
+        <div class="col-8">
+            <input asp-for="Nome" class="form-control form-control-sm" maxlength="254" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <input type="submit" value="Salvar" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <a class="btn btn-sm btn-info" asp-action="Index">Voltar à Página Inicial</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

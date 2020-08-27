@@ -1,0 +1,36 @@
+﻿@model IEnumerable<InstituicaoEnsino.Models.Professor>
+
+@{
+    ViewData["Title"] = "Lista de Professores";
+}
+
+<h2>Professores</h2>
+<br />
+<p>
+    <a class="btn btn-success" asp-action="Create">Novo Professor</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.ActionLink("Lista de Alunos", "Index", "Aluno", new { idProfessor = item.IdProfessor }) 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

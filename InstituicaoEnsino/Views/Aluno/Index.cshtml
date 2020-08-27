@@ -1,0 +1,120 @@
+﻿@model IEnumerable<InstituicaoEnsino.Models.Aluno>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script type="text/javascript">
+    function deleteAluno(elem, id) {
+        if (confirm('Deseja excluir o registro?')) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteAluno")',
+                data: { id: id },
+                success: function () {
+                    $(elem).parents('tr').remove();
+                },
+                error: function () {
+                    alert('Ocorreu um erro ao excluir o registro.');
+                }
+            });
+        }
+    }
+</script>
+
+<h2>Lista de Alunos </h2>
+<p> Professor: @ViewData["NomeProfessor"] </p>
+
+<button class="btn btn-info" data-toggle="modal" data-target="#modalImport">Importar Alunos</button>
+
+<br />
+
+<!-- Modal para importar arquivo -->
+<div class="modal fade" id="modalImport" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("UploadListaAlunos", "Aluno"
+                 , new { idProfessor = ViewData["IdProfessor"] }
+                 , FormMethod.Post, false
+                 , new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-header">
+                    <h5 class="modal-title">Importar Alunos</h5>
+                </div>
+                <div class="modal-body">
+                    <label for="file">Selecionar Arquivo:</label>
+                    <input type="file" name="file" id="file" /><br><br>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" class="btn btn-success" value="Importar" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["Message"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mensalidade)
+            </th>
+            <th>
+                Data de Vencimento
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mensalidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataVencimento)
+            </td>
+            <td>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="deleteAluno(this, @item.IdAluno);">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a class="btn btn-sm btn-info" asp-controller="Professor" asp-action="Index">Voltar à Página Inicial</a>
+</div>
